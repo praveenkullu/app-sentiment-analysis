@@ -20,7 +20,7 @@ COPY ./inference/distilbert-base-uncased-finetuned-sst-2-english ./distilbert-ba
 # Compile proto
 RUN python -m grpc_tools.protoc -I./proto --python_out=. --grpc_python_out=. ./proto/inference.proto
 
-ENV INFERENCE_PORT=50051
+ENV SERVICE_PORT=50051
 EXPOSE 50051
 
 CMD ["python", "server.py"]

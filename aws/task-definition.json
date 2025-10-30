@@ -1,0 +1,75 @@
+{
+    "family": "SA-S4-stack",
+    "executionRoleArn": "arn:aws:iam::559050217591:role/ecsTaskExec",
+    "networkMode": "awsvpc",
+    "requiresCompatibilities": [
+      "FARGATE"
+    ],
+    "cpu": "4096",
+    "memory": "10240",
+    "containerDefinitions": [
+      {
+        "name": "inference-container",
+        "image": "559050217591.dkr.ecr.us-east-2.amazonaws.com/dev-inference-service",
+        "cpu": 2048,
+        "memoryReservation": 7680,
+        "portMappings": [
+          {
+            "containerPort": 50051,
+            "protocol": "tcp"
+          }
+        ],
+        "essential": true,
+        "logConfiguration": {
+          "logDriver": "awslogs",
+          "options": {
+            "awslogs-group": "/ecs/inference-stack",
+            "awslogs-region": "us-east-1",
+            "awslogs-stream-prefix": "inference"
+          }
+        }
+      },
+      {
+        "name": "api-gateway-container",
+        "image": "559050217591.dkr.ecr.us-east-2.amazonaws.com/dev-api-gateway",
+        "cpu": 1024,
+        "memoryReservation": 1024,
+        "portMappings": [
+          {
+            "containerPort": 3001,
+            "protocol": "tcp"
+          }
+        ],
+        "essential": true,
+        "logConfiguration": {
+          "logDriver": "awslogs",
+          "options": {
+            "awslogs-group": "/ecs/inference-stack",
+            "awslogs-region": "us-east-1",
+            "awslogs-stream-prefix": "api-gateway"
+          }
+        }
+      },
+      {
+        "name": "frontend-container",
+        "image": "559050217591.dkr.ecr.us-east-2.amazonaws.com/dev-frontend",
+        "cpu": 512,
+        "memoryReservation": 512,
+        "portMappings": [
+          {
+            "containerPort": 80,
+            "protocol": "tcp"
+          }
+        ],
+        "essential": true,
+        "logConfiguration": {
+          "logDriver": "awslogs",
+          "options": {
+            "awslogs-group": "/ecs/inference-stack",
+            "awslogs-region": "us-east-1",
+            "awslogs-stream-prefix": "frontend"
+          }
+        }
+      }
+    ]
+  }

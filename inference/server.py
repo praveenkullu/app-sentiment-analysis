@@ -58,7 +58,7 @@ class InferenceServicer(inference_pb2_grpc.InferenceServicer):
 
 # ======== gRPC Server ========
 def serve():
-    port = int(os.environ.get("INFERENCE_PORT", 50051))
+    port = int(os.environ.get("SERVICE_PORT", 50051))
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     inference_pb2_grpc.add_InferenceServicer_to_server(InferenceServicer(), server)
     server.add_insecure_port(f"[::]:{port}")

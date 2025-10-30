@@ -14,6 +14,9 @@ spec:
     spec:
       containers:
       - name: inference
-        image: inference:latest
+        image: 559050217591.dkr.ecr.us-east-2.amazonaws.com/dev-inference-service:latest
         ports:
         - containerPort: 50051
+        env:
+        - name: SERVICE_PORT
+          value: "50051"

@@ -16,7 +16,7 @@ services:
       dockerfile: ./api-gateway/Dockerfile
     container_name: api-gateway
     environment:
-      - INFERENCE_ADDR=inference-service:50051
+      - INFERENCE_ADDR=inference:50051
     ports:
       - "3001:3001"
     depends_on:

@@ -1,10 +1,4 @@
-// server.js
 const express = require('express');
-// import express from 'express';
-// import cors from 'cors';
-// import grpc from '@grpc/grpc-js';
-// import protoLoader from '@grpc/proto-loader';
-// import path from 'path';
 const cors = require('cors');
 const grpc = require('@grpc/grpc-js');
 const protoLoader = require('@grpc/proto-loader');
@@ -13,9 +7,9 @@ const path = require('path');
 const app = express();
 app.use(express.json());
 
-// ✅ Step 1 — Load gRPC client
+// gRPC client
 const PROTO_PATH = path.join(__dirname, 'proto', 'inference.proto');
-const INFERENCE_ADDR = process.env.INFERENCE_ADDR || 'inference-service:50051';
+const INFERENCE_ADDR = process.env.INFERENCE_ADDR || 'inference:50051';
 
 const packageDef = protoLoader.loadSync(PROTO_PATH, {
   keepCase: true,
@@ -27,18 +21,15 @@ const packageDef = protoLoader.loadSync(PROTO_PATH, {
 const proto = grpc.loadPackageDefinition(packageDef).inference;
 const client = new proto.Inference(INFERENCE_ADDR, grpc.credentials.createInsecure());
 
-// ✅ Step 2 — CORS setup (MUST come before routes)
+// CORS setup
 const corsOptions = {
-  origin: 'http://localhost:8080',
-  methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type'],
+  origin: '*',
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
 };
 app.use(cors(corsOptions));
+app.options('*', cors());
 
-// ✅ Step 3 — Handle all OPTIONS requests globally
-app.options('*', cors(corsOptions));
-
-// ✅ Step 4 — API route
+// Predict route
 app.post('/api/predict', (req, res) => {
   const text = req.body?.text || '';
   if (!text.trim()) {
@@ -54,7 +45,13 @@ app.post('/api/predict', (req, res) => {
   });
 });
 
+// Health check
+app.get("/", (req, res) => {
+  res.send("API Gateway running");
+});
+
+// Start server
 const port = process.env.PORT || 3001;
-app.listen(port, () => {
+app.listen(port, "0.0.0.0", () => {
   console.log(`[api-gateway] HTTP server listening on ${port}, gRPC target ${INFERENCE_ADDR}`);
 });

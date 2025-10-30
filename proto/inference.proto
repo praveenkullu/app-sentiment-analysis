@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package inference;
+
+service Inference {
+  // Sends text, receives sentiment score and label
+  rpc Predict (PredictRequest) returns (PredictResponse);
+}
+
+message PredictRequest {
+  string text = 1;
+}
+
+message PredictResponse {
+  double score = 1; // -1.0 (negative) .. +1.0 (positive)
+  string label = 2; // "negative", "neutral", "positive"
+  string model = 3; // optional model name
+}

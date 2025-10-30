@@ -1,0 +1,6 @@
+# Corrected paths relative to the build context root (the directory with the Dockerfile)
+
+inference/distilbert-base-uncased-finetuned-sst-2-english/rust_model.ot
+inference/distilbert-base-uncased-finetuned-sst-2-english/tf_model.h5
+inference/distilbert-base-uncased-finetuned-sst-2-english/.gitignore
+inference/distilbert-base-uncased-finetuned-sst-2-english/.git

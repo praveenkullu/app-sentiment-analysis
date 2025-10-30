@@ -1,0 +1,6 @@
+# requirements.txt
+grpcio
+grpcio-tools
+protobuf
+transformers
+torch

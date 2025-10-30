@@ -1,0 +1,40 @@
+version: "3.8"
+services:
+  inference-service:
+    build:
+      context: .
+      dockerfile: ./inference/Dockerfile
+    container_name: inference-service
+    ports:
+      - "50051:50051"
+    networks:
+      - appnet
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: ./api-gateway/Dockerfile
+    container_name: api-gateway
+    environment:
+      - INFERENCE_ADDR=inference-service:50051
+    ports:
+      - "3001:3001"
+    depends_on:
+      - inference-service
+    networks:
+      - appnet
+
+  frontend:
+    build:
+      context: .
+      dockerfile: ./frontend/Dockerfile
+    ports:
+      - "8080:80"
+    depends_on:
+      - api-gateway
+    networks:
+      - appnet
+
+networks:
+  appnet:
+    driver: bridge
